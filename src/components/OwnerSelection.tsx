@@ -79,31 +79,6 @@ function OwnerSelection({
     onSave();
   };
 
-  const renderNavigationItems = () =>
-    navigation.map((item) => {
-      const Icon = item.icon;
-      const active = item.label === "Follow-ups";
-
-      return (
-        <button
-          key={item.label}
-          type="button"
-          aria-current={active ? "page" : undefined}
-          className={`flex flex-col items-center justify-center gap-1 rounded-xl transition ${
-            active
-              ? "bg-blue-50 font-semibold text-blue-600"
-              : "text-slate-500 hover:bg-slate-50"
-          }`}
-        >
-          <Icon size={20} strokeWidth={1.8} />
-
-          <span className="whitespace-nowrap text-[10px]">
-            {item.label}
-          </span>
-        </button>
-      );
-    });
-
   return (
     <div className="min-h-screen w-full bg-[#f3f6fb] text-slate-800">
 
