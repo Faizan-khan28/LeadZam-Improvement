@@ -79,29 +79,54 @@ function OwnerSelection({
     onSave();
   };
 
+  const renderNavigationItems = () =>
+    navigation.map((item) => {
+      const Icon = item.icon;
+      const active = item.label === "Follow-ups";
+
+      return (
+        <button
+          key={item.label}
+          type="button"
+          aria-current={active ? "page" : undefined}
+          className={`flex flex-col items-center justify-center gap-1 rounded-xl transition ${
+            active
+              ? "bg-blue-50 font-semibold text-blue-600"
+              : "text-slate-500 hover:bg-slate-50"
+          }`}
+        >
+          <Icon size={20} strokeWidth={1.8} />
+
+          <span className="whitespace-nowrap text-[10px]">
+            {item.label}
+          </span>
+        </button>
+      );
+    });
+
   return (
     <div className="min-h-screen w-full bg-[#f3f6fb] text-slate-800">
 
       {/* HEADER */}
-      <header className="fixed left-0 right-0 top-0 z-20 flex h-16 items-center justify-between border-b border-slate-200 bg-white px-5 md:left-[76px] md:px-8">
+      <header className="fixed left-0 right-0 top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200 bg-white px-4 sm:px-5 md:left-[76px] md:px-8">
 
-        <div className="flex items-center gap-3 text-sm">
-          <Home size={17} className="text-slate-500" />
+        <div className="flex min-w-0 items-center gap-2 text-xs sm:gap-3 sm:text-sm">
+          <Home size={17} className="shrink-0 text-slate-500" />
 
-          <ChevronRight size={14} className="text-slate-400" />
+          <ChevronRight size={14} className="shrink-0 text-slate-400" />
 
           <span className="text-slate-500">
             Follow-ups
           </span>
 
-          <ChevronRight size={14} className="text-slate-400" />
+          <ChevronRight size={14} className="shrink-0 text-slate-400" />
 
-          <span className="font-semibold text-slate-900">
+          <span className="truncate font-semibold text-slate-900">
             Assign owner
           </span>
         </div>
 
-        <div className="flex items-center gap-5">
+        <div className="flex shrink-0 items-center gap-3 sm:gap-5">
 
           <button
             type="button"
@@ -111,31 +136,35 @@ function OwnerSelection({
             Help
           </button>
 
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-50 text-xs font-bold text-blue-600">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 text-xs font-bold text-blue-600 sm:h-9 sm:w-9">
             FA
           </div>
 
         </div>
       </header>
 
-      {/* SIDEBAR - SAME AS FOLLOW-UP SCREEN */}
-      <aside className="fixed bottom-0 left-0 top-0 z-30 hidden w-[76px] flex-col items-center border-r border-slate-200 bg-white md:flex">
+      {/* DESKTOP SIDEBAR */}
+      <aside className="fixed bottom-0 left-0 top-0 z-40 hidden w-[76px] flex-col items-center border-r border-slate-200 bg-white md:flex">
 
         {/* Logo */}
         <div className="mb-5 mt-4 flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600 text-xl font-bold text-white">
           L
         </div>
 
-        {/* Navigation */}
-        <nav className="flex w-full flex-1 flex-col items-center gap-1 px-2">
-
+        {/* Desktop navigation */}
+        <nav
+          aria-label="Desktop navigation"
+          className="flex w-full flex-1 flex-col items-center gap-1 px-2"
+        >
           {navigation.map((item) => {
             const Icon = item.icon;
             const active = item.label === "Follow-ups";
 
             return (
-              <div
+              <button
                 key={item.label}
+                type="button"
+                aria-current={active ? "page" : undefined}
                 className={`flex w-full flex-col items-center gap-1 rounded-xl py-2.5 transition ${
                   active
                     ? "bg-blue-50 font-semibold text-blue-600"
@@ -147,10 +176,9 @@ function OwnerSelection({
                 <span className="text-[10px]">
                   {item.label}
                 </span>
-              </div>
+              </button>
             );
           })}
-
         </nav>
 
         {/* Profile */}
@@ -160,19 +188,49 @@ function OwnerSelection({
 
       </aside>
 
+      {/* MOBILE BOTTOM NAVIGATION */}
+      <nav
+        aria-label="Mobile navigation"
+        className="fixed inset-x-0 bottom-0 z-50 flex h-[72px] items-center gap-1 overflow-x-auto border-t border-slate-200 bg-white px-2 shadow-[0_-2px_10px_rgba(15,23,42,0.04)] md:hidden"
+      >
+        {navigation.map((item) => {
+          const Icon = item.icon;
+          const active = item.label === "Follow-ups";
+
+          return (
+            <button
+              key={item.label}
+              type="button"
+              aria-current={active ? "page" : undefined}
+              className={`flex min-w-[68px] shrink-0 flex-col items-center justify-center gap-1 rounded-lg px-1 py-2 transition ${
+                active
+                  ? "bg-blue-50 font-semibold text-blue-600"
+                  : "text-slate-500 hover:bg-slate-50"
+              }`}
+            >
+              <Icon size={19} strokeWidth={1.8} />
+
+              <span className="whitespace-nowrap text-[9px]">
+                {item.label}
+              </span>
+            </button>
+          );
+        })}
+      </nav>
+
       {/* MAIN CONTENT */}
-      <main className="ml-0 min-h-screen px-4 pb-10 pt-24 md:ml-[76px] md:px-8">
+      <main className="ml-0 min-h-screen w-full px-4 pb-28 pt-24 md:ml-[76px] md:w-[calc(100%-76px)] md:px-8 md:pb-10">
 
         <div className="mx-auto w-full max-w-[1200px]">
 
           {/* PAGE HEADING */}
           <div className="mb-5">
 
-            <h1 className="text-2xl font-bold text-slate-900">
+            <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">
               Assign a follow-up owner
             </h1>
 
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-xs text-slate-500 sm:text-sm">
               Choose who is responsible for the next action.
             </p>
 
@@ -183,16 +241,16 @@ function OwnerSelection({
           </div>
 
           {/* TWO COLUMN LAYOUT */}
-          <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(260px,0.8fr)]">
+          <div className="grid min-w-0 grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(260px,0.8fr)]">
 
             {/* OWNER SELECTION CARD */}
             <section className="min-w-0 rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
 
               {/* PROGRESS STEPS */}
-              <div className="mb-7 flex items-center gap-3 text-xs">
+              <div className="mb-7 flex items-center gap-2 text-[10px] sm:gap-3 sm:text-xs">
 
                 <div className="flex items-center gap-2 whitespace-nowrap">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-white">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-500 text-white">
                     <Check size={13} />
                   </span>
 
@@ -201,10 +259,10 @@ function OwnerSelection({
                   </span>
                 </div>
 
-                <div className="h-px min-w-3 flex-1 bg-slate-200" />
+                <div className="h-px min-w-2 flex-1 bg-slate-200" />
 
                 <div className="flex items-center gap-2 whitespace-nowrap">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full border border-blue-500 text-blue-600">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full border border-blue-500 text-blue-600">
                     2
                   </span>
 
@@ -213,10 +271,10 @@ function OwnerSelection({
                   </span>
                 </div>
 
-                <div className="h-px min-w-3 flex-1 bg-slate-200" />
+                <div className="h-px min-w-2 flex-1 bg-slate-200" />
 
                 <div className="flex items-center gap-2 whitespace-nowrap">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-slate-500">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-slate-500">
                     3
                   </span>
 
@@ -238,15 +296,20 @@ function OwnerSelection({
               {/* SEARCH */}
               <div className="mt-6">
 
-                <label className="mb-2 block text-[10px] font-bold uppercase tracking-wide text-slate-500">
+                <label
+                  htmlFor="owner-search"
+                  className="mb-2 block text-[10px] font-bold uppercase tracking-wide text-slate-500"
+                >
                   Follow-up Owner
                 </label>
 
-                <div className={`relative rounded-lg border ${
-                  error
-                    ? "border-red-400"
-                    : "border-slate-200 focus-within:border-blue-500"
-                }`}>
+                <div
+                  className={`relative rounded-lg border ${
+                    error
+                      ? "border-red-400"
+                      : "border-slate-200 focus-within:border-blue-500"
+                  }`}
+                >
 
                   <Search
                     size={15}
@@ -254,6 +317,8 @@ function OwnerSelection({
                   />
 
                   <input
+                    id="owner-search"
+                    type="search"
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
                     placeholder="Search team members by name or email..."
@@ -280,6 +345,7 @@ function OwnerSelection({
                           onSelectOwner(member.id);
                           setError("");
                         }}
+                        aria-pressed={selected}
                         className={`flex w-full items-center gap-3 rounded-lg px-2 py-3 text-left transition sm:px-3 ${
                           selected
                             ? "bg-blue-50"
@@ -310,7 +376,7 @@ function OwnerSelection({
                           {member.email}
                         </span>
 
-                        {/* Selected icon */}
+                        {/* Selection check */}
                         <span
                           className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${
                             selected
@@ -354,12 +420,16 @@ function OwnerSelection({
 
                 <div>
 
-                  <label className="mb-2 flex items-center gap-1 text-[10px] font-bold uppercase text-slate-500">
+                  <label
+                    htmlFor="owner-notification"
+                    className="mb-2 flex items-center gap-1 text-[10px] font-bold uppercase text-slate-500"
+                  >
                     <Bell size={12} />
                     Notify Owner
                   </label>
 
                   <select
+                    id="owner-notification"
                     value={notification}
                     onChange={(event) =>
                       setNotification(event.target.value)
@@ -374,12 +444,16 @@ function OwnerSelection({
 
                 <div>
 
-                  <label className="mb-2 flex items-center gap-1 text-[10px] font-bold uppercase text-slate-500">
+                  <label
+                    htmlFor="owner-visibility"
+                    className="mb-2 flex items-center gap-1 text-[10px] font-bold uppercase text-slate-500"
+                  >
                     <Eye size={12} />
                     Visibility
                   </label>
 
                   <select
+                    id="owner-visibility"
                     value={visibility}
                     onChange={(event) =>
                       setVisibility(event.target.value)
@@ -419,7 +493,7 @@ function OwnerSelection({
 
             </section>
 
-            {/* RIGHT SIDE PANELS */}
+            {/* RIGHT INFORMATION PANELS */}
             <aside className="min-w-0 space-y-4">
 
               {/* BEFORE YOU CONTINUE */}
@@ -481,6 +555,8 @@ function OwnerSelection({
           </div>
         </div>
       </main>
+
+      {/* Mobile bottom navigation is fixed above this screen's content */}
     </div>
   );
 }
